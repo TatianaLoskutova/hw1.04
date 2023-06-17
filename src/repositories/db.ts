@@ -1,5 +1,7 @@
 import dotenv from 'dotenv'
 import {MongoClient} from 'mongodb';
+import {BlogMongoDbType, PostMongoDbType} from '../types';
+import {PaginatorBlogViewModel} from '../models/blog/PaginatorBlogViewModel';
 dotenv.config()
 
 const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
