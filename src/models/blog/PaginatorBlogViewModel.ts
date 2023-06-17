@@ -7,3 +7,4 @@ export type PaginatorBlogViewModel = {
     totalCount: number
     items: Array<BlogViewModel>
 }
+

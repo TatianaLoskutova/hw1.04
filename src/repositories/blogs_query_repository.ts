@@ -1,6 +1,9 @@
 import {PaginatorBlogViewModel} from '../models/blog/PaginatorBlogViewModel';
 import {blogsCollection} from './db';
 import {makeBlogMapping, makeBlogPagination} from '../helpers/functions';
+import {ObjectId} from 'mongodb';
+import {BlogViewModel} from '../models/blog/BlogViewModel';
+import {BlogMongoDbType} from '../types';
 
 
 export const blogsQueryRepository = {
@@ -27,22 +30,32 @@ export const blogsQueryRepository = {
             sortObj[sortBy] = 1
         }
 
-        const outputPaging = await makeBlogPagination(
-            filter,
-            sortObj,
-            pageNumber,
-            pageSize
-        )
-
+        const outputPaging = await makeBlogPagination(filter, sortObj, pageNumber, pageSize)
         const blogsCount = await blogsCollection.countDocuments(filter)
         const pagesCount = Math.ceil(blogsCount/pageSize)
 
         return {
             pagesCount: pagesCount,
-            page: +pageNumber,
-            pageSize: +pageSize,
+            page: pageNumber,
+            pageSize: pageSize,
             totalCount: blogsCount,
             items: makeBlogMapping(outputPaging)
+        }
+    },
+
+    async findBlogById(_id: ObjectId): Promise<BlogViewModel | null> {
+        const foundedBlog: BlogMongoDbType | null = await blogsCollection.findOne({_id})
+
+        if (!foundedBlog) {
+            return null
+        }
+        return {
+            id: foundedBlog._id.toString(),
+            name: foundedBlog.name,
+            description: foundedBlog.description,
+            websiteUrl: foundedBlog.websiteUrl,
+            createdAt: foundedBlog.createdAt,
+            isMembership: foundedBlog.isMembership
         }
     }
 }
