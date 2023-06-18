@@ -7,6 +7,12 @@ export const errorsValidation = (req: Request, res: Response, next: NextFunction
     if (errors.isEmpty()) {
         return next()
     }
+    const idFinder = errors.array().find((el: any) => {
+        el.path === 'id'
+    })
+    if (idFinder) {
+        return res.sendStatus(404)
+    }
     const errorsMessages = errors.array({onlyFirstError: true})
         .map((el: any) => {
             return {
@@ -16,3 +22,4 @@ export const errorsValidation = (req: Request, res: Response, next: NextFunction
         })
     return res.status(400).send({errorsMessages})
 }
+

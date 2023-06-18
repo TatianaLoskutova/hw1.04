@@ -83,13 +83,12 @@ blogsRouters.post('/:id/posts',
     errorsValidation,
     async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
     const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
+        if (!newPostForBlogById) {
+        res.sendStatus(404)
+        return
+    } else  {
         res.status(201).send(newPostForBlogById)
-    //     if (!newPostForBlogById) {
-    //     res.sendStatus(404)
-    //     return
-    // } else  {
-    //     res.status(201).send(newPostForBlogById)
-    // }
+    }
 
 })
 
