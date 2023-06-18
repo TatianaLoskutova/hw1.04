@@ -1,9 +1,19 @@
-import {Router, Request, Response} from 'express';
-import {RequestWithParams, RequestWithQuery} from '../types';
+import {Router,Response} from 'express';
+import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery} from '../types';
 import {PostQueryModel} from '../models/post/PostQueryModel';
 import {postsQueryRepository} from '../repositories/posts_query_repository';
 import {GetByIdParam} from '../models/getById';
 import {ObjectId} from 'mongodb';
+import {PostInputModel} from '../models/post/PostInputModel';
+import {postsService} from '../domain/posts_service';
+import {authorizationValidation} from '../middlewares/authorization_validation';
+import {
+    postBlogIdValidation,
+    postContentValidation,
+    postShortDescription,
+    postTitleValidation
+} from '../middlewares/posts_validators';
+import {errorsValidation} from '../middlewares/errors_validation';
 
 
 
@@ -30,11 +40,45 @@ postsRouters.get('/:id', async (req:RequestWithParams<GetByIdParam>, res: Respon
     res.status(200).send(foundedPost)
 })
 
-// postsRouters.post('/', async (req: RequestWithBody<PostInputModel>, res: Response) => {
-//     const newPost = await postsService.createPost(req.body)
-//     if (newBlog) {
-//         res.status(201).send(newPost)
-//     }
-// })
+postsRouters.post('/',
+    authorizationValidation,
+    postTitleValidation,
+    postShortDescription,
+    postContentValidation,
+    postBlogIdValidation,
+    errorsValidation,
+    async (req: RequestWithBody<PostInputModel>, res: Response) => {
+    const newPost = await postsService.createPost(req.body)
+    if (newPost) {
+        res.status(201).send(newPost)
+    }
+})
+
+postsRouters.put('/:id',
+    authorizationValidation,
+    postTitleValidation,
+    postShortDescription,
+    postContentValidation,
+    postBlogIdValidation,
+    errorsValidation,
+    async (req: RequestWithParamsAndBody<GetByIdParam,PostInputModel>, res: Response) => {
+    const isUpdated = await postsService.updatePost(req.params.id, req.body)
+    if (isUpdated) {
+        res.sendStatus(204)
+    } else {
+        res.sendStatus(404)
+    }
+})
+
+postsRouters.delete('/:id',
+    authorizationValidation,
+    async (req: RequestWithParams<GetByIdParam>, res: Response) => {
+        const isDeleted = await postsService.deletePostById(req.params.id)
+        if (isDeleted) {
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })
 
 

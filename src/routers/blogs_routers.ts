@@ -8,11 +8,11 @@ import {ObjectId} from 'mongodb';
 import {GetByIdParam} from '../models/getById';
 import {PostQueryModel} from '../models/post/PostQueryModel';
 import {postsQueryRepository} from '../repositories/posts_query_repository';
-import {BlogPostInputModel} from '../models/blog/BlogPostInputModel';
 import {postsService} from '../domain/posts_service';
 import {PostInputModel} from '../models/post/PostInputModel';
-
-
+import {authorizationValidation} from '../middlewares/authorization_validation';
+import {blogDescriptionValidation, blogNameValidation, blogWebsiteUrlValidation} from '../middlewares/blogs_validators';
+import {errorsValidation} from '../middlewares/errors_validation';
 
 
 export const blogsRouters = Router()
@@ -56,14 +56,26 @@ blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdPara
 
 })
 
-blogsRouters.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response) => {
+blogsRouters.post('/',
+    authorizationValidation,
+    blogNameValidation,
+    blogDescriptionValidation,
+    blogWebsiteUrlValidation,
+    errorsValidation,
+    async (req: RequestWithBody<BlogInputModel>, res: Response) => {
     const newBlog = await blogsService.createBlog(req.body)
     if (newBlog) {
         res.status(201).send(newBlog)
     }
 })
 
-blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
+blogsRouters.post('/:id/posts',
+    authorizationValidation,
+    blogNameValidation,
+    blogDescriptionValidation,
+    blogWebsiteUrlValidation,
+    errorsValidation,
+    async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
     const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
     if (!newPostForBlogById) {
         res.sendStatus(404)
@@ -74,7 +86,13 @@ blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdPara
 
 })
 
-blogsRouters.put('/:id', async (req: RequestWithParamsAndBody<GetByIdParam,BlogInputModel>, res: Response) => {
+blogsRouters.put('/:id',
+    authorizationValidation,
+    blogNameValidation,
+    blogDescriptionValidation,
+    blogWebsiteUrlValidation,
+    errorsValidation,
+    async (req: RequestWithParamsAndBody<GetByIdParam,BlogInputModel>, res: Response) => {
         const isUpdated = await blogsService.updateBlog(req.params.id, req.body)
         if (isUpdated) {
             res.sendStatus(204)
@@ -83,8 +101,8 @@ blogsRouters.put('/:id', async (req: RequestWithParamsAndBody<GetByIdParam,BlogI
         }
     })
 
-// доделать
 blogsRouters.delete('/:id',
+    authorizationValidation,
     async (req: RequestWithParams<GetByIdParam>, res: Response) => {
         const isDeleted = await blogsService.deleteBlogById(req.params.id)
         if (isDeleted) {

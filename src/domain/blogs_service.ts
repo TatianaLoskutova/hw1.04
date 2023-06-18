@@ -5,8 +5,6 @@ import {BlogMongoDbType} from '../types';
 import {ObjectId} from 'mongodb';
 import {blogsCollection} from '../repositories/db';
 
-
-
 export const blogsService = {
 
     async createBlog(inputData: BlogInputModel): Promise<BlogViewModel> {
