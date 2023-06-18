@@ -29,7 +29,7 @@ export const blogsService = {
     },
 
     async deleteBlogById(id: string): Promise<boolean> {
-        const blogToDelete = await blogsCollection.findOne({id})
+        const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
 
         if (!blogToDelete) {
             return false
