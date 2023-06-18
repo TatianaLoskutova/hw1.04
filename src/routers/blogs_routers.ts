@@ -13,6 +13,12 @@ import {PostInputModel} from '../models/post/PostInputModel';
 import {authorizationValidation} from '../middlewares/authorization_validation';
 import {blogDescriptionValidation, blogNameValidation, blogWebsiteUrlValidation} from '../middlewares/blogs_validators';
 import {errorsValidation} from '../middlewares/errors_validation';
+import {
+    postBlogIdValidation,
+    postContentValidation,
+    postShortDescription,
+    postTitleValidation
+} from '../middlewares/posts_validators';
 
 
 export const blogsRouters = Router()
@@ -71,9 +77,10 @@ blogsRouters.post('/',
 
 blogsRouters.post('/:id/posts',
     authorizationValidation,
-    blogNameValidation,
-    blogDescriptionValidation,
-    blogWebsiteUrlValidation,
+    postTitleValidation,
+    postShortDescription,
+    postContentValidation,
+    postBlogIdValidation,
     errorsValidation,
     async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
     const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
