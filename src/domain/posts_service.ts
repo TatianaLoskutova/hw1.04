@@ -54,7 +54,7 @@ export const postsService = {
     },
 
     async deletePostById(id: string): Promise<boolean> {
-        const postToDelete = await postsCollection.findOne({id})
+        const postToDelete = await postsCollection.findOne({_id: new ObjectId(id)})
 
         if (!postToDelete) {
             return false
