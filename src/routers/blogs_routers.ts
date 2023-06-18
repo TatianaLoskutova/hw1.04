@@ -38,7 +38,6 @@ blogsRouters.get('/', async (req: RequestWithQuery<BlogQueryModel>, res: Respons
     })
 
 blogsRouters.get('/:id',
-    blogValidationById,
     async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedBlog = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
     if (!foundedBlog) {
@@ -66,7 +65,6 @@ blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdPara
 })
 
 blogsRouters.post('/',
-    blogValidationById,
     authorizationValidation,
     blogNameValidation,
     blogDescriptionValidation,
