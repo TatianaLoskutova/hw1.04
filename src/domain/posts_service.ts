@@ -10,7 +10,7 @@ import {PostMongoDbType} from '../types';
 
 export const postsService = {
 
-    async createPostForBlogById(_id: ObjectId,inputData: PostInputModel): Promise<PostViewModel | undefined> {
+    async createPostForBlogById(id: string,inputData: PostInputModel): Promise<PostViewModel | undefined> {
         const postByBlogId = await blogsCollection.findOne({_id: new ObjectId(inputData.blogId)})
         if (!postByBlogId) {
             return undefined
