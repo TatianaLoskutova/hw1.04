@@ -1,11 +1,5 @@
 import {Router,Response} from 'express';
-import {
-    RequestWithBody,
-    RequestWithParams,
-    RequestWithParamsAndBody,
-    RequestWithParamsAndQuery,
-    RequestWithQuery
-} from '../types';
+import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery, RequestWithQuery} from '../types';
 import {BlogInputModel} from '../models/blog/BlogInputModel';
 import {blogsService} from '../domain/blogs_service';
 import {BlogQueryModel} from '../models/blog/BlogQueryModel';
@@ -16,6 +10,7 @@ import {PostQueryModel} from '../models/post/PostQueryModel';
 import {postsQueryRepository} from '../repositories/posts_query_repository';
 import {BlogPostInputModel} from '../models/blog/BlogPostInputModel';
 import {postsService} from '../domain/posts_service';
+import {PostInputModel} from '../models/post/PostInputModel';
 
 
 
@@ -68,7 +63,7 @@ blogsRouters.post('/', async (req: RequestWithBody<BlogInputModel>, res: Respons
     }
 })
 
-blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdParam, BlogPostInputModel>, res: Response) => {
+blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
     const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
     if (!newPostForBlogById) {
         res.sendStatus(404)
@@ -78,3 +73,23 @@ blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdPara
     }
 
 })
+
+blogsRouters.put('/:id', async (req: RequestWithParamsAndBody<GetByIdParam,BlogInputModel>, res: Response) => {
+        const isUpdated = await blogsService.updateBlog(req.params.id, req.body)
+        if (isUpdated) {
+            res.sendStatus(204)
+        } else {
+            res.sendStatus(404)
+        }
+    })
+
+// доделать
+blogsRouters.delete('/:id',
+    async (req: RequestWithParams<GetByIdParam>, res: Response) => {
+        const isDeleted = await blogsService.deleteBlogById(req.params.id)
+        if (isDeleted) {
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    })

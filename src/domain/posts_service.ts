@@ -4,13 +4,14 @@ import {PostInputModel} from '../models/post/PostInputModel';
 import {blogsCollection} from '../repositories/db';
 import {postsRepository} from '../repositories/posts_repository';
 import {PostMongoDbType} from '../types';
+import {BlogPostInputModel} from '../models/blog/BlogPostInputModel';
 
 
 
 export const postsService = {
 
     async createPostForBlogById(_id: ObjectId,inputData: PostInputModel): Promise<PostViewModel | undefined> {
-        const postByBlogId = await blogsCollection.findOne({_id})
+        const postByBlogId = await blogsCollection.findOne({_id: new ObjectId(inputData.blogId)})
         if (!postByBlogId) {
             return undefined
         }
@@ -21,10 +22,10 @@ export const postsService = {
             content: inputData.content,
             blogId: inputData.blogId,
             blogName: postByBlogId.name,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().toISOString()
         }
-        const result = await postsRepository.createPostForBlogById(newPost)
-        return result
+        return await postsRepository.createPostForBlogById(newPost)
+
     }
 
 
