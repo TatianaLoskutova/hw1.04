@@ -80,7 +80,6 @@ blogsRouters.post('/:id/posts',
     postTitleValidation,
     postShortDescription,
     postContentValidation,
-    postBlogIdValidation,
     errorsValidation,
     async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
     const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
