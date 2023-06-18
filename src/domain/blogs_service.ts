@@ -10,15 +10,16 @@ export const blogsService = {
     async createBlog(inputData: BlogInputModel): Promise<BlogViewModel> {
 
         const newBlog: BlogMongoDbType = {
-        _id: new ObjectId(),
-        name: inputData.name,
-        description: inputData.description,
-        websiteUrl: inputData.websiteUrl,
-        createdAt: new Date().toISOString(),
-        isMembership: false
-    }
-        const result = await blogsRepository.createBlog(newBlog)
-        return result
+            _id: new ObjectId(),
+            name: inputData.name,
+            description: inputData.description,
+            websiteUrl: inputData.websiteUrl,
+            createdAt: new Date().toISOString(),
+            isMembership: false
+        }
+        const createdBlog = await blogsRepository.createBlog(newBlog)
+        return createdBlog
+
     },
     async updateBlog(id: string, data: BlogInputModel): Promise<boolean> {
         if (!ObjectId.isValid(id)) {

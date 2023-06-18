@@ -11,7 +11,6 @@ export const blogsRepository = {
     async createBlog(newBlog: BlogMongoDbType): Promise<BlogViewModel> {
 
         const result = await blogsCollection.insertOne(newBlog)
-
         return {
             id: result.insertedId.toString(),
             name: newBlog.name,
