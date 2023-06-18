@@ -35,9 +35,7 @@ export const postsQueryRepository = {
         }
     },
 
-    async findPostById(
-        _id: ObjectId
-    ): Promise<PostViewModel | null> {
+    async findPostById(_id: ObjectId): Promise<PostViewModel | null> {
       const foundedPost: PostMongoDbType | null = await postsCollection.findOne({_id})
         if (!foundedPost) {
             return null
@@ -63,6 +61,13 @@ export const postsQueryRepository = {
 
         const filter = { blogId: blogId.toString() }
         const sortObj: any = {}
+
+        // Проверить такую схему, потом удалить filter везде ниже
+        // if (blogId) {
+        //     blogId: blogId.toString()
+        // } else {
+        //     return
+        // }
 
         if (sortBy) {
             sortObj[sortBy] = -1

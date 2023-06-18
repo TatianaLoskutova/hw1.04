@@ -24,3 +24,4 @@ export type RequestWithBody<T> = Request<{},{},T>
 export type RequestWithQuery<T> = Request<{},{},{},T>
 export type RequestWithParams<T> = Request<T>
 export type RequestWithParamsAndQuery<T, B> = Request<T,{},{},B>
+export type RequestWithParamsAndBody<T, B> = Request<T, {}, B>

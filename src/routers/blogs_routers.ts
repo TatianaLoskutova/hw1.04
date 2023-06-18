@@ -1,5 +1,11 @@
 import {Router,Response} from 'express';
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndQuery, RequestWithQuery} from '../types';
+import {
+    RequestWithBody,
+    RequestWithParams,
+    RequestWithParamsAndBody,
+    RequestWithParamsAndQuery,
+    RequestWithQuery
+} from '../types';
 import {BlogInputModel} from '../models/blog/BlogInputModel';
 import {blogsService} from '../domain/blogs_service';
 import {BlogQueryModel} from '../models/blog/BlogQueryModel';
@@ -8,6 +14,8 @@ import {ObjectId} from 'mongodb';
 import {GetByIdParam} from '../models/getById';
 import {PostQueryModel} from '../models/post/PostQueryModel';
 import {postsQueryRepository} from '../repositories/posts_query_repository';
+import {BlogPostInputModel} from '../models/blog/BlogPostInputModel';
+import {postsService} from '../domain/posts_service';
 
 
 
@@ -24,11 +32,8 @@ blogsRouters.get('/', async (req: RequestWithQuery<BlogQueryModel>, res: Respons
     )
     if (getAllBlogs) {
         res.status(200).send(getAllBlogs)
-    } else {
-        res.sendStatus(404)
-    }
-
-})
+        }
+    })
 
 blogsRouters.get('/:id', async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedBlog = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
@@ -39,13 +44,6 @@ blogsRouters.get('/:id', async (req:RequestWithParams<GetByIdParam>, res: Respon
     res.status(200).send(foundedBlog)
 })
 
-blogsRouters.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response) => {
-    const newBlog = await blogsService.createBlog(req.body)
-    if (newBlog) {
-        res.status(201).send(newBlog)
-    }
-})
-
 blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdParam, PostQueryModel>, res: Response ) => {
     const foundedPostsByBlogId = await postsQueryRepository.findPostsByBlogId(
         new ObjectId(req.params.id),
@@ -54,15 +52,29 @@ blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdPara
         req.query.sortBy,
         req.query.sortDirection
     )
-    if (foundedPostsByBlogId) {
-        res.status(200).send(foundedPostsByBlogId)
-    } else {
+    if (!foundedPostsByBlogId) {
         res.sendStatus(404)
+        return
+    } else {
+        res.status(200).send(foundedPostsByBlogId)
     }
 
 })
 
-// blogsRouters.post('/:id/posts', async () => {
-//     const newPostForBlogById = await blogsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
-//     res.status(201).send(newPostForBlogById)
-// })
+blogsRouters.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response) => {
+    const newBlog = await blogsService.createBlog(req.body)
+    if (newBlog) {
+        res.status(201).send(newBlog)
+    }
+})
+
+blogsRouters.post('/:id/posts', async (req: RequestWithParamsAndBody<GetByIdParam, BlogPostInputModel>, res: Response) => {
+    const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
+    if (!newPostForBlogById) {
+        res.sendStatus(404)
+        return
+    } else  {
+        res.status(201).send(newPostForBlogById)
+    }
+
+})
