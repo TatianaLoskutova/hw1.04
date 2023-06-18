@@ -6,7 +6,7 @@ import {GetByIdParam} from '../models/getById';
 
 
 export const validBlogId: CustomValidator = async (req:RequestWithParams<GetByIdParam>): Promise<boolean> => {
-    const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
+    const findBlogWithId = await blogsQueryRepository.findBlogById(req.params.id)
     if (!findBlogWithId) {
         throw new Error('Blog is not found')
     } else {
