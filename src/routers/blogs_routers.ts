@@ -70,8 +70,8 @@ blogsRouters.post('/',
     blogDescriptionValidation,
     blogWebsiteUrlValidation,
     errorsValidation,
-    async (req: RequestWithBody<BlogInputModel>, res: Response) => {
-    const newBlog = await blogsService.createBlog(req.body)
+    async (req: RequestWithParamsAndBody<GetByIdParam,BlogInputModel>, res: Response) => {
+    const newBlog = await blogsService.createBlog(new ObjectId(req.params.id),req.body)
     if (newBlog) {
         res.status(201).send(newBlog)
     }

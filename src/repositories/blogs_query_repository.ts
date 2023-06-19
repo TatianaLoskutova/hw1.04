@@ -43,11 +43,11 @@ export const blogsQueryRepository = {
         }
     },
 
-    async findBlogById(_id: ObjectId): Promise<BlogViewModel | null> {
-        const foundedBlog: BlogMongoDbType | null = await blogsCollection.findOne({_id})
+    async findBlogById(_id: ObjectId): Promise<BlogViewModel | boolean> {
+        const foundedBlog = await blogsCollection.findOne({_id})
 
         if (!foundedBlog) {
-            return null
+            return false
         }
         return {
             id: foundedBlog._id.toString(),

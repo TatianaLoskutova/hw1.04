@@ -7,7 +7,7 @@ import {blogsCollection} from '../repositories/db';
 
 export const blogsService = {
 
-    async createBlog(inputData: BlogInputModel): Promise<BlogViewModel> {
+    async createBlog(_id: ObjectId,inputData: BlogInputModel): Promise<BlogViewModel> {
 
         const newBlog: BlogMongoDbType = {
             _id: new ObjectId(),

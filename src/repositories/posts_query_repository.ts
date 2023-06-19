@@ -35,10 +35,10 @@ export const postsQueryRepository = {
         }
     },
 
-    async findPostById(_id: ObjectId): Promise<PostViewModel | null> {
-      const foundedPost: PostMongoDbType | null = await postsCollection.findOne({_id})
+    async findPostById(_id: ObjectId): Promise<PostViewModel | boolean> {
+      const foundedPost = await postsCollection.findOne({_id})
         if (!foundedPost) {
-            return null
+            return false
         }
         return {
             id: foundedPost._id.toString(),
