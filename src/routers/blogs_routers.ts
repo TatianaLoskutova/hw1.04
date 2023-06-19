@@ -20,6 +20,7 @@ import {
     postTitleValidation
 } from '../middlewares/posts_validators';
 import {blogValidationById} from '../middlewares/blogByIdValidation';
+import {PosBlogInputModel} from '../models/post/PosBlogInputModel';
 
 
 export const blogsRouters = Router()
@@ -70,8 +71,8 @@ blogsRouters.post('/',
     blogDescriptionValidation,
     blogWebsiteUrlValidation,
     errorsValidation,
-    async (req: RequestWithParamsAndBody<GetByIdParam,BlogInputModel>, res: Response) => {
-    const newBlog = await blogsService.createBlog(new ObjectId(req.params.id),req.body)
+    async (req: RequestWithParams<BlogInputModel>, res: Response) => {
+    const newBlog = await blogsService.createBlog(req.body)
     if (newBlog) {
         res.status(201).send(newBlog)
     }
@@ -84,7 +85,7 @@ blogsRouters.post('/:id/posts',
     postContentValidation,
     errorsValidation,
     async (req: RequestWithParamsAndBody<GetByIdParam, PostInputModel>, res: Response) => {
-    const newPostForBlogById = await postsService.createPostForBlogById(req.params.id, req.body)
+    const newPostForBlogById = await postsService.createPostForBlogById(new ObjectId(req.params.id), req.body)
         if (!newPostForBlogById) {
         res.sendStatus(404)
         return

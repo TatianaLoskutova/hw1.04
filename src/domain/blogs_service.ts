@@ -7,7 +7,7 @@ import {blogsCollection} from '../repositories/db';
 
 export const blogsService = {
 
-    async createBlog(_id: ObjectId,inputData: BlogInputModel): Promise<BlogViewModel> {
+    async createBlog(inputData: BlogInputModel): Promise<BlogViewModel> {
 
         const newBlog: BlogMongoDbType = {
             _id: new ObjectId(),
@@ -29,7 +29,7 @@ export const blogsService = {
     },
 
     async deleteBlogById(id: string): Promise<boolean> {
-        const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
+        const blogToDelete = await blogsRepository.deleteBlogById(id)
 
         if (!blogToDelete) {
             return false
