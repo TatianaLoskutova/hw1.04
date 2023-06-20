@@ -31,7 +31,7 @@ export const blogsQueryRepository = {
 
         const outputPaging = await makeBlogPagination(filter, sortObj, pageNumber, pageSize)
         const blogsCount = await blogsCollection.countDocuments(filter)
-        const pagesCount = Math.ceil(blogsCount/pageSize)
+        const pagesCount = Math.ceil(blogsCount/+pageSize)
 
         // может плюсики чекануть
         return {
