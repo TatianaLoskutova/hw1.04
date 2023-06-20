@@ -100,7 +100,7 @@ blogsRouters.post('/:id/posts',
 
 blogsRouters.put('/:id',
     authorizationValidation,
-    blogIdValidation,
+    // blogIdValidation,
     blogNameValidation,
     blogDescriptionValidation,
     blogWebsiteUrlValidation,
