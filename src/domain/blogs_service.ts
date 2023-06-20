@@ -4,6 +4,7 @@ import {BlogViewModel} from '../models/blog/BlogViewModel';
 import {BlogMongoDbType} from '../types';
 import {ObjectId} from 'mongodb';
 import {blogsCollection} from '../repositories/db';
+import {blogsQueryRepository} from '../repositories/blogs_query_repository';
 
 export const blogsService = {
 
@@ -29,8 +30,17 @@ export const blogsService = {
     },
 
     // или нужно было сначала еще в query искать ?
+    // async deleteBlogById(id: string): Promise<boolean> {
+    //     const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
+    //
+    //     if (!blogToDelete) {
+    //         return false
+    //     }
+    //     return await blogsRepository.deleteBlogById(id)
+    // },
+
     async deleteBlogById(id: string): Promise<boolean> {
-        const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
+        const blogToDelete = await blogsQueryRepository.findBlogById(new ObjectId(id))
 
         if (!blogToDelete) {
             return false
