@@ -55,6 +55,7 @@ blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdPara
     const result = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
     if  (!result) {
         res.sendStatus(404)
+        return
     }
     const foundedPostsByBlogId = await postsQueryRepository.findPostsByBlogId(
         new ObjectId(req.params.id),
