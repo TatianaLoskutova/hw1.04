@@ -52,6 +52,10 @@ blogsRouters.get('/:id',
 })
 
 blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdParam, PostQueryModel>, res: Response ) => {
+    const result = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
+    if  (!result) {
+        res.sendStatus(404)
+    }
     const foundedPostsByBlogId = await postsQueryRepository.findPostsByBlogId(
         new ObjectId(req.params.id),
         req.query.pageNumber,
@@ -59,13 +63,7 @@ blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdPara
         req.query.sortBy,
         req.query.sortDirection
     )
-    if (!foundedPostsByBlogId) {
-        res.sendStatus(404)
-        return
-    } else {
-        res.status(200).send(foundedPostsByBlogId)
-    }
-
+    res.status(200).send(foundedPostsByBlogId)
 })
 
 blogsRouters.post('/',
