@@ -31,8 +31,8 @@ blogsRouters.get('/', async (req: RequestWithQuery<BlogQueryModel>, res: Respons
         req.query.searchNameTerm,
         req.query.sortBy,
         req.query.sortDirection,
-        Number(req.query.pageNumber),
-        Number(req.query.pageSize)
+        req.query.pageNumber,
+        req.query.pageSize
     )
     if (getAllBlogs) {
         res.status(200).send(getAllBlogs)
