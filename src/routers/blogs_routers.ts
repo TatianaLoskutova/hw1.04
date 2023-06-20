@@ -83,7 +83,7 @@ blogsRouters.post('/',
 
 blogsRouters.post('/:id/posts',
     authorizationValidation,
-    blogIdValidation,
+    // blogIdValidation,
     postTitleValidation,
     postShortDescription,
     postContentValidation,

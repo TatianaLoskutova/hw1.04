@@ -9,13 +9,11 @@ import {blogsRepository} from '../repositories/blogs_repository';
 import {blogsQueryRepository} from '../repositories/blogs_query_repository';
 
 
-
-
 export const postsService = {
 
-        async createPostForBlogById(_id: ObjectId, inputData: PostInputModel): Promise<PostViewModel | undefined> {
-            const newPost = await blogsQueryRepository.findBlogById(_id)
-            if (!newPost) {
+    async createPostForBlogById(_id: ObjectId, inputData: PostInputModel): Promise<PostViewModel | undefined> {
+        const newPost = await blogsQueryRepository.findBlogById(_id)
+        if (!newPost) {
             return undefined
         }
         const addedPost: PostMongoDbType = {
@@ -27,7 +25,7 @@ export const postsService = {
             blogName: newPost.name,
             createdAt: new Date().toISOString(),
         }
-        return await  postsRepository.createPost(addedPost)
+        return await postsRepository.createPost(addedPost)
 
     },
     // Когда через queryBlogRep не работал blogName: blog.name
@@ -36,24 +34,24 @@ export const postsService = {
         if (!blog) {
             return null
         }
-            const addedPost: PostMongoDbType = {
-                _id: new ObjectId(),
-                title: inputData.title,
-                shortDescription: inputData.shortDescription,
-                content: inputData.content,
-                blogId: inputData.blogId,
-                blogName: blog.name,
-                createdAt: new Date().toISOString(),
+        const addedPost: PostMongoDbType = {
+            _id: new ObjectId(),
+            title: inputData.title,
+            shortDescription: inputData.shortDescription,
+            content: inputData.content,
+            blogId: inputData.blogId,
+            blogName: blog.name,
+            createdAt: new Date().toISOString(),
         }
-            return await  postsRepository.createPost(addedPost)
+        return await postsRepository.createPost(addedPost)
 
-        },
+    },
 
     async updatePost(id: string, data: PostInputModel): Promise<boolean> {
         if (!ObjectId.isValid(id)) {
             return false
         }
-        return  await postsRepository.updatePost(id, data)
+        return await postsRepository.updatePost(id, data)
     },
 
     // или нужно было сначала еще в query искать ?
@@ -67,7 +65,7 @@ export const postsService = {
     },
 
     async deleteAllPosts(): Promise<boolean> {
-        return  await postsRepository.deleteAllPosts()
+        return await postsRepository.deleteAllPosts()
     }
 
 }
