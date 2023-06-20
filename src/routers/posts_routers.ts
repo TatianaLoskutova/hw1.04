@@ -19,8 +19,8 @@ export const postsRouters = Router()
 
 postsRouters.get('/', async (req: RequestWithQuery<PostQueryModel>, res: Response) => {
     const getAllPosts = await postsQueryRepository.getAllPosts(
-        Number(req.query.pageNumber),
-        Number(req.query.pageSize),
+        req.query.pageNumber,
+        req.query.pageSize,
         req.query.sortBy,
         req.query.sortDirection
     )

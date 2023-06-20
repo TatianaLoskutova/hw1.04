@@ -24,12 +24,12 @@ export const postsQueryRepository = {
         }
         const outputPaging = await makePostPagination(sortObj, pageNumber, pageSize)
         const postsCount = await postsCollection.countDocuments()
-        const pagesCount = Math.ceil(postsCount/pageSize)
+        const pagesCount = Math.ceil(postsCount/+pageSize)
 
         return {
             pagesCount: pagesCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount: postsCount,
             items: makePostMapping(outputPaging)
         }

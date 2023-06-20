@@ -37,8 +37,8 @@ export const makePostPagination = async (
     return await postsCollection
         .find(filter)
         .sort(sortObj)
-        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
-        .limit(pageSize > 0 ? pageSize : 0)
+        .skip(+pageNumber > 0 ? (+pageNumber - 1) * +pageSize : 0)
+        .limit(+pageSize > 0 ? +pageSize : 0)
         .toArray()
 }
 
