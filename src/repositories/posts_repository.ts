@@ -25,6 +25,7 @@ export const postsRepository = {
     },
 
     async createPost(newPost: PostMongoDbType): Promise<PostViewModel> {
+
         const result = await postsCollection.insertOne(newPost)
         return {
             id: result.insertedId.toString(),

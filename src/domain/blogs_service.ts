@@ -17,8 +17,8 @@ export const blogsService = {
             createdAt: new Date().toISOString(),
             isMembership: false
         }
-        const createdBlog = await blogsRepository.createBlog(newBlog)
-        return createdBlog
+        return  await blogsRepository.createBlog(newBlog)
+
 
     },
     async updateBlog(id: string, data: BlogInputModel): Promise<boolean> {
@@ -28,8 +28,9 @@ export const blogsService = {
         return  await blogsRepository.updateBlog(id, data)
     },
 
+    // или нужно было сначала еще в query искать ?
     async deleteBlogById(id: string): Promise<boolean> {
-        const blogToDelete = await blogsRepository.deleteBlogById(id)
+        const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
 
         if (!blogToDelete) {
             return false

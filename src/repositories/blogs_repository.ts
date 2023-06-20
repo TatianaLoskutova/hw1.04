@@ -1,4 +1,4 @@
-import {blogsCollection} from './db';
+import {blogsCollection, postsCollection} from './db';
 import {BlogViewModel} from '../models/blog/BlogViewModel';
 import {BlogMongoDbType} from '../types';
 import {BlogInputModel} from '../models/blog/BlogInputModel';
@@ -40,6 +40,7 @@ export const blogsRepository = {
         const result = await blogsCollection.deleteOne({_id: new ObjectId(id)})
         return result.deletedCount === 1
     },
+
 
     async deleteAllBlogs(): Promise<boolean> {
         const result = await blogsCollection.deleteMany({})

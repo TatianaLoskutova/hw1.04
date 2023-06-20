@@ -35,10 +35,10 @@ export const postsQueryRepository = {
         }
     },
 
-    async findPostById(_id: ObjectId): Promise<PostViewModel | boolean> {
+    async findPostById(_id: ObjectId): Promise<PostViewModel | null> {
       const foundedPost = await postsCollection.findOne({_id})
         if (!foundedPost) {
-            return false
+            return null
         }
         return {
             id: foundedPost._id.toString(),
@@ -61,13 +61,6 @@ export const postsQueryRepository = {
 
         const filter = { blogId: blogId.toString() }
         const sortObj: any = {}
-
-        // Проверить такую схему, потом удалить filter везде ниже
-        // if (blogId) {
-        //     blogId: blogId.toString()
-        // } else {
-        //     return
-        // }
 
         if (sortBy) {
             sortObj[sortBy] = -1

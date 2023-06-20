@@ -3,7 +3,6 @@ import {blogsCollection} from './db';
 import {makeBlogMapping, makeBlogPagination} from '../helpers/functions';
 import {ObjectId} from 'mongodb';
 import {BlogViewModel} from '../models/blog/BlogViewModel';
-import {BlogMongoDbType} from '../types';
 
 
 export const blogsQueryRepository = {
@@ -34,6 +33,7 @@ export const blogsQueryRepository = {
         const blogsCount = await blogsCollection.countDocuments(filter)
         const pagesCount = Math.ceil(blogsCount/pageSize)
 
+        // может плюсики чекануть
         return {
             pagesCount: pagesCount,
             page: pageNumber,
@@ -43,18 +43,18 @@ export const blogsQueryRepository = {
         }
     },
 
-    async findBlogById(id: ObjectId): Promise<BlogViewModel | boolean> {
-        const foundedBlog = await blogsCollection.findOne({_id: new ObjectId(id)})
+    async findBlogById(_id: ObjectId): Promise<BlogViewModel | null> {
+        const foundedBlog = await blogsCollection.findOne({_id})
 
         if (!foundedBlog) {
-            return false
+            return null
         }
         return {
             id: foundedBlog._id.toString(),
             name: foundedBlog.name,
             description: foundedBlog.description,
             websiteUrl: foundedBlog.websiteUrl,
-            createdAt: new Date().toISOString(),
+            createdAt: foundedBlog.createdAt,
             isMembership: foundedBlog.isMembership
         }
     }

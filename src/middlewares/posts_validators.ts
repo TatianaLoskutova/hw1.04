@@ -1,8 +1,4 @@
 import {body, CustomValidator} from 'express-validator';
-import {blogsQueryRepository} from '../repositories/blogs_query_repository';
-import {RequestWithParams} from '../types';
-import {GetByIdParam} from '../models/getById';
-import {ObjectId} from 'mongodb';
 import {blogsRepository} from '../repositories/blogs_repository';
 
 
