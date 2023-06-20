@@ -54,8 +54,8 @@ blogsRouters.get('/:id',
 blogsRouters.get('/:id/posts', async (req: RequestWithParamsAndQuery<GetByIdParam, PostQueryModel>, res: Response ) => {
     const foundedPostsByBlogId = await postsQueryRepository.findPostsByBlogId(
         new ObjectId(req.params.id),
-        Number(req.query.pageNumber),
-        Number(req.query.pageSize),
+        req.query.pageNumber,
+        req.query.pageSize,
         req.query.sortBy,
         req.query.sortDirection
     )

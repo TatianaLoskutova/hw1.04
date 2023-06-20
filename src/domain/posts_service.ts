@@ -12,22 +12,6 @@ import {blogsQueryRepository} from '../repositories/blogs_query_repository';
 
 
 export const postsService = {
-// Когда тут blogsCollection, name
-//     async createPostForBlogById(_id: ObjectId, inputData: PostInputModel): Promise<PostViewModel | undefined> {
-//         const newPost = await postsCollection.findOne({_id: new ObjectId(inputData.blogId)})
-//         if (!newPost) {
-//             return undefined
-//         }
-//         const addedPost: PostMongoDbType = {
-//             _id: new ObjectId(),
-//             title: inputData.title,
-//             shortDescription: inputData.shortDescription,
-//             content: inputData.content,
-//             blogId: inputData.blogId,
-//             blogName: newPost.blogName,
-//             createdAt: new Date().toISOString(),
-//         }
-//         return await  postsRepository.createPost(addedPost)
 
         async createPostForBlogById(_id: ObjectId, inputData: PostInputModel): Promise<PostViewModel | undefined> {
             const newPost = await blogsQueryRepository.findBlogById(_id)
