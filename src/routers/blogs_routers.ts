@@ -118,7 +118,7 @@ blogsRouters.put('/:id',
 
 blogsRouters.delete('/:id',
     authorizationValidation,
-    blogIdValidation,
+    // blogIdValidation,
     async (req: RequestWithParams<GetByIdParam>, res: Response) => {
         const isDeleted = await blogsService.deleteBlogById(req.params.id)
         if (isDeleted) {

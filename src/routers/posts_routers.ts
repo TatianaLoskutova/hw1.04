@@ -7,8 +7,7 @@ import {ObjectId} from 'mongodb';
 import {PostInputModel} from '../models/post/PostInputModel';
 import {postsService} from '../domain/posts_service';
 import {authorizationValidation} from '../middlewares/authorization_validation';
-import {postBlogIdValidation, postContentValidation, postShortDescription, postTitleValidation
-} from '../middlewares/posts_validators';
+import {postBlogIdValidation, postContentValidation, postShortDescription, postTitleValidation} from '../middlewares/posts_validators';
 import {errorsValidation} from '../middlewares/errors_validation';
 
 
