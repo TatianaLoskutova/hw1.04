@@ -3,10 +3,11 @@ import {blogsQueryRepository} from '../repositories/blogs_query_repository';
 import {RequestWithParams} from '../types';
 import {GetByIdParam} from '../models/getById';
 import {ObjectId} from 'mongodb';
+import {blogsRepository} from '../repositories/blogs_repository';
 
 
-export const validBlogId: CustomValidator = async (req:RequestWithParams<GetByIdParam>): Promise<boolean> => {
-    const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
+export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
+    const findBlogWithId = await blogsRepository.getBlogById(value)
     if (!findBlogWithId) {
         throw new Error('Blog is not found')
     } else {

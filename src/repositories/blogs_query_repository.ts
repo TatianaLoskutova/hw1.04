@@ -43,8 +43,8 @@ export const blogsQueryRepository = {
         }
     },
 
-    async findBlogById(_id: ObjectId): Promise<BlogViewModel | boolean> {
-        const foundedBlog = await blogsCollection.findOne({_id})
+    async findBlogById(id: ObjectId): Promise<BlogViewModel | boolean> {
+        const foundedBlog = await blogsCollection.findOne({_id: new ObjectId(id)})
 
         if (!foundedBlog) {
             return false
