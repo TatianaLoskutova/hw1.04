@@ -7,7 +7,7 @@ export const errorsValidation = (req: Request, res: Response, next: NextFunction
     if (errors.isEmpty()) {
         return next()
     }
-    const errorsMessages = errors.array()
+    const errorsMessages = errors.array({onlyFirstError: true})
         .map((el: any) => {
             return {
                 message: el.msg,
