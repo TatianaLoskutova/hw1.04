@@ -12,7 +12,7 @@ import {ObjectId} from 'mongodb';
 //         return true
 //     }
 // }
-
+//
 // export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
 //     const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(value))
 //     if (!findBlogWithId) {
@@ -32,4 +32,9 @@ export const postContentValidation = body('content')
     .isString().withMessage('Should be string')
     .trim().isLength({min: 1, max: 1000}).withMessage('Incorrect length')
 export const postBlogIdValidation = body('blogId')
-    .isString().trim().withMessage('Should be string')
+    .isString().trim().withMessage('Should be string').custom(async value => {
+        const blog = await blogsQueryRepository.findBlogById(new ObjectId(value));
+        if (!blog) {
+            throw new Error('Id is not exist');
+        }
+    })
