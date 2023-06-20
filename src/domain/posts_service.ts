@@ -39,7 +39,7 @@ export const postsService = {
             title: inputData.title,
             shortDescription: inputData.shortDescription,
             content: inputData.content,
-            blogId: inputData.blogId,
+            blogId: newPost.id,
             blogName: newPost.name,
             createdAt: new Date().toISOString(),
         }
