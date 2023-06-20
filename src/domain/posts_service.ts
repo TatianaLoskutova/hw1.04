@@ -24,7 +24,7 @@ export const postsService = {
             content: inputData.content,
             blogId: inputData.blogId,
             blogName: newPost.blogName,
-            createdAt: new Date().toString(),
+            createdAt: new Date().toISOString(),
         }
         return await  postsRepository.createPost(addedPost)
 
@@ -42,7 +42,7 @@ export const postsService = {
                 content: inputData.content,
                 blogId: inputData.blogId,
                 blogName: blog.name,
-                createdAt: new Date().toString(),
+                createdAt: new Date().toISOString(),
         }
             return await  postsRepository.createPost(addedPost)
 
