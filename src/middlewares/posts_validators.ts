@@ -1,9 +1,20 @@
 import {body, CustomValidator} from 'express-validator';
 import {blogsRepository} from '../repositories/blogs_repository';
+import {blogsQueryRepository} from '../repositories/blogs_query_repository';
+import {ObjectId} from 'mongodb';
 
+
+// export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
+//     const findBlogWithId = await blogsRepository.getBlogById(value)
+//     if (!findBlogWithId) {
+//         throw new Error('Blog is not found')
+//     } else {
+//         return true
+//     }
+// }
 
 export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
-    const findBlogWithId = await blogsRepository.getBlogById(value)
+    const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(value))
     if (!findBlogWithId) {
         throw new Error('Blog is not found')
     } else {
