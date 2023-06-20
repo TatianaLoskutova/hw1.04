@@ -21,6 +21,7 @@ import {
 } from '../middlewares/posts_validators';
 import {blogValidationById} from '../middlewares/blogByIdValidation';
 import {PosBlogInputModel} from '../models/post/PosBlogInputModel';
+import {blogIdValidation} from '../middlewares/blogIdValidation';
 
 
 export const blogsRouters = Router()
@@ -38,7 +39,10 @@ blogsRouters.get('/', async (req: RequestWithQuery<BlogQueryModel>, res: Respons
         }
     })
 
-blogsRouters.get('/:id', async (req:RequestWithParams<GetByIdParam>, res: Response) => {
+blogsRouters.get('/:id',
+    blogIdValidation,
+    errorsValidation,
+    async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedBlog = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
     if (!foundedBlog) {
         res.sendStatus(404)
@@ -79,6 +83,7 @@ blogsRouters.post('/',
 
 blogsRouters.post('/:id/posts',
     authorizationValidation,
+    blogIdValidation,
     postTitleValidation,
     postShortDescription,
     postContentValidation,
@@ -96,6 +101,7 @@ blogsRouters.post('/:id/posts',
 
 blogsRouters.put('/:id',
     authorizationValidation,
+    blogIdValidation,
     blogNameValidation,
     blogDescriptionValidation,
     blogWebsiteUrlValidation,
@@ -112,6 +118,7 @@ blogsRouters.put('/:id',
 
 blogsRouters.delete('/:id',
     authorizationValidation,
+    blogIdValidation,
     async (req: RequestWithParams<GetByIdParam>, res: Response) => {
         const isDeleted = await blogsService.deleteBlogById(req.params.id)
         if (isDeleted) {

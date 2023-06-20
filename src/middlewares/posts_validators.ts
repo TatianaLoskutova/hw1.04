@@ -13,14 +13,14 @@ import {ObjectId} from 'mongodb';
 //     }
 // }
 
-export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
-    const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(value))
-    if (!findBlogWithId) {
-        throw new Error('Blog is not found')
-    } else {
-        return true
-    }
-}
+// export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
+//     const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(value))
+//     if (!findBlogWithId) {
+//         throw new Error('Blog is not found')
+//     } else {
+//         return true
+//     }
+// }
 
 export const postTitleValidation = body('title')
     .isString().withMessage('Should be string')
@@ -33,4 +33,3 @@ export const postContentValidation = body('content')
     .trim().isLength({min: 1, max: 1000}).withMessage('Incorrect length')
 export const postBlogIdValidation = body('blogId')
     .isString().withMessage('Should be string')
-    .custom(validBlogId)

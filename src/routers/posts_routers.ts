@@ -7,13 +7,11 @@ import {ObjectId} from 'mongodb';
 import {PostInputModel} from '../models/post/PostInputModel';
 import {postsService} from '../domain/posts_service';
 import {authorizationValidation} from '../middlewares/authorization_validation';
-import {
-    postBlogIdValidation,
-    postContentValidation,
-    postShortDescription,
-    postTitleValidation
+import {postBlogIdValidation, postContentValidation, postShortDescription, postTitleValidation
 } from '../middlewares/posts_validators';
 import {errorsValidation} from '../middlewares/errors_validation';
+
+import {postIdValidation} from '../middlewares/postIdValidation';
 
 
 
@@ -31,7 +29,10 @@ postsRouters.get('/', async (req: RequestWithQuery<PostQueryModel>, res: Respons
     }
 })
 
-postsRouters.get('/:id', async (req:RequestWithParams<GetByIdParam>, res: Response) => {
+postsRouters.get('/:id',
+    postIdValidation,
+    errorsValidation,
+    async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedPost = await postsQueryRepository.findPostById(new ObjectId(req.params.id))
     if (!foundedPost) {
         res.sendStatus(404)
@@ -56,6 +57,7 @@ postsRouters.post('/',
 
 postsRouters.put('/:id',
     authorizationValidation,
+    postIdValidation,
     postTitleValidation,
     postShortDescription,
     postContentValidation,
@@ -72,6 +74,7 @@ postsRouters.put('/:id',
 
 postsRouters.delete('/:id',
     authorizationValidation,
+    postIdValidation,
     async (req: RequestWithParams<GetByIdParam>, res: Response) => {
         const isDeleted = await postsService.deletePostById(req.params.id)
         if (isDeleted) {

@@ -1,37 +1,39 @@
 import {ObjectId} from 'mongodb';
 import {PostViewModel} from '../models/post/PostViewModel';
 import {PostInputModel} from '../models/post/PostInputModel';
-import {blogsCollection, postsCollection} from '../repositories/db';
+import {postsCollection} from '../repositories/db';
 import {postsRepository} from '../repositories/posts_repository';
 import {PostMongoDbType} from '../types';
+import {BlogViewModel} from '../models/blog/BlogViewModel';
+import {blogsRepository} from '../repositories/blogs_repository';
 
 
 
 
 export const postsService = {
 
-    async createPostForBlogById(id: string,inputData: PostInputModel): Promise<PostViewModel | undefined> {
-        const postByBlogId = await blogsCollection.findOne({_id: new ObjectId(inputData.blogId)})
-        if (!postByBlogId) {
+    async createPostForBlogById(_id: ObjectId, inputData: PostInputModel): Promise<PostViewModel | undefined> {
+        const newPost = await postsCollection.findOne({_id: new ObjectId(inputData.blogId)})
+        if (!newPost) {
             return undefined
         }
-        const newPost: PostMongoDbType = {
+        const addedPost: PostMongoDbType = {
             _id: new ObjectId(),
             title: inputData.title,
             shortDescription: inputData.shortDescription,
             content: inputData.content,
             blogId: inputData.blogId,
-            blogName: postByBlogId.name,
-            createdAt: new Date().toISOString()
+            blogName: newPost.blogName,
+            createdAt: new Date().toString(),
         }
-        return await postsRepository.createPostForBlogById(newPost)
+        return await  postsRepository.createPost(addedPost)
 
     },
-
-    async createPost(inputData: PostInputModel): Promise<PostViewModel | undefined> {
-        const newPost = await postsCollection.findOne({_id: new ObjectId(inputData.blogId)})
-        if (!newPost) {
-            return undefined
+    // Когда через queryBlogRep не работал blogName: blog.name
+    async createPost(inputData: PostInputModel): Promise<PostViewModel | null> {
+        const blog: BlogViewModel | null = await blogsRepository.getBlogById(inputData.blogId)
+        if (!blog) {
+            return null
         }
             const addedPost: PostMongoDbType = {
                 _id: new ObjectId(),
@@ -39,7 +41,7 @@ export const postsService = {
                 shortDescription: inputData.shortDescription,
                 content: inputData.content,
                 blogId: inputData.blogId,
-                blogName: newPost.blogName,
+                blogName: blog.name,
                 createdAt: new Date().toString(),
         }
             return await  postsRepository.createPost(addedPost)
@@ -53,6 +55,7 @@ export const postsService = {
         return  await postsRepository.updatePost(id, data)
     },
 
+    // или нужно было сначала еще в query искать ?
     async deletePostById(id: string): Promise<boolean> {
         const postToDelete = await postsCollection.findOne({_id: new ObjectId(id)})
 
