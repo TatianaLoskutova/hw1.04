@@ -36,8 +36,8 @@ export const blogsQueryRepository = {
         // может плюсики чекануть
         return {
             pagesCount: pagesCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount: blogsCount,
             items: makeBlogMapping(outputPaging)
         }
