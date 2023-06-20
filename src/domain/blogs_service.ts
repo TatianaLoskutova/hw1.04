@@ -29,15 +29,6 @@ export const blogsService = {
         return  await blogsRepository.updateBlog(id, data)
     },
 
-    // или нужно было сначала еще в query искать ?
-    //     // async deleteBlogById(id: string): Promise<boolean> {
-    //     //     const blogToDelete = await blogsCollection.findOne({_id: new ObjectId(id)})
-    //     //
-    //     //     if (!blogToDelete) {
-    //     //         return false
-    //     //     }
-    //     //     return await blogsRepository.deleteBlogById(id)
-    //     // },
 
     async deleteBlogById(id: string): Promise<boolean> {
         const blogToDelete = await blogsQueryRepository.findBlogById(new ObjectId(id))

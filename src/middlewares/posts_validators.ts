@@ -4,23 +4,6 @@ import {blogsQueryRepository} from '../repositories/blogs_query_repository';
 import {ObjectId} from 'mongodb';
 
 
-// export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
-//     const findBlogWithId = await blogsRepository.getBlogById(value)
-//     if (!findBlogWithId) {
-//         throw new Error('Blog is not found')
-//     } else {
-//         return true
-//     }
-// }
-//
-// export const validBlogId: CustomValidator = async (value: string): Promise<boolean> => {
-//     const findBlogWithId = await blogsQueryRepository.findBlogById(new ObjectId(value))
-//     if (!findBlogWithId) {
-//         throw new Error('Blog is not found')
-//     } else {
-//         return true
-//     }
-// }
 
 export const postTitleValidation = body('title')
     .isString().withMessage('Should be string')

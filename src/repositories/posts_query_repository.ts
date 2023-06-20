@@ -1,9 +1,9 @@
 import {ObjectId} from 'mongodb';
 import {PaginatorPostViewModel} from '../models/post/PaginatorPostViewModel';
-import {makeBlogMapping, makeBlogPagination, makePostMapping, makePostPagination} from '../helpers/functions';
-import {blogsCollection, postsCollection} from './db';
+import {makePostMapping, makePostPagination} from '../helpers/functions';
+import {postsCollection} from './db';
 import {PostViewModel} from '../models/post/PostViewModel';
-import {PostMongoDbType} from '../types';
+
 
 
 export const postsQueryRepository = {

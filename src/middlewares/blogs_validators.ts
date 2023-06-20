@@ -1,6 +1,6 @@
 import {body} from 'express-validator';
 
-// Как сделать цельную?
+
 export const blogNameValidation = body('name')
     .isString().withMessage('Should be string')
     .trim().isLength({min: 1, max: 15}).withMessage('Incorrect length')

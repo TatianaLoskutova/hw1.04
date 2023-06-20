@@ -1,5 +1,5 @@
 import {Router,Response} from 'express';
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery, RequestWithQuery} from '../types';
+import {RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery, RequestWithQuery} from '../types';
 import {BlogInputModel} from '../models/blog/BlogInputModel';
 import {blogsService} from '../domain/blogs_service';
 import {BlogQueryModel} from '../models/blog/BlogQueryModel';
@@ -13,15 +13,7 @@ import {PostInputModel} from '../models/post/PostInputModel';
 import {authorizationValidation} from '../middlewares/authorization_validation';
 import {blogDescriptionValidation, blogNameValidation, blogWebsiteUrlValidation} from '../middlewares/blogs_validators';
 import {errorsValidation} from '../middlewares/errors_validation';
-import {
-    postBlogIdValidation,
-    postContentValidation,
-    postShortDescription,
-    postTitleValidation
-} from '../middlewares/posts_validators';
-import {blogValidationById} from '../middlewares/blogByIdValidation';
-import {PosBlogInputModel} from '../models/post/PosBlogInputModel';
-import {blogIdValidation} from '../middlewares/blogIdValidation';
+import {postContentValidation, postShortDescription, postTitleValidation} from '../middlewares/posts_validators';
 
 
 export const blogsRouters = Router()
@@ -40,8 +32,6 @@ blogsRouters.get('/', async (req: RequestWithQuery<BlogQueryModel>, res: Respons
     })
 
 blogsRouters.get('/:id',
-    // blogIdValidation,
-    // errorsValidation,
     async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedBlog = await blogsQueryRepository.findBlogById(new ObjectId(req.params.id))
     if (!foundedBlog) {
@@ -82,7 +72,6 @@ blogsRouters.post('/',
 
 blogsRouters.post('/:id/posts',
     authorizationValidation,
-    // blogIdValidation,
     postTitleValidation,
     postShortDescription,
     postContentValidation,
@@ -100,7 +89,6 @@ blogsRouters.post('/:id/posts',
 
 blogsRouters.put('/:id',
     authorizationValidation,
-    // blogIdValidation,
     blogNameValidation,
     blogDescriptionValidation,
     blogWebsiteUrlValidation,

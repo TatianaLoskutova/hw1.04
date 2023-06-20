@@ -33,7 +33,7 @@ export const blogsQueryRepository = {
         const blogsCount = await blogsCollection.countDocuments(filter)
         const pagesCount = Math.ceil(blogsCount/+pageSize)
 
-        // может плюсики чекануть
+
         return {
             pagesCount: pagesCount,
             page: +pageNumber,

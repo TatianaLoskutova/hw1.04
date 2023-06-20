@@ -29,7 +29,6 @@ postsRouters.get('/', async (req: RequestWithQuery<PostQueryModel>, res: Respons
 })
 
 postsRouters.get('/:id',
-    // postIdValidation,
     errorsValidation,
     async (req:RequestWithParams<GetByIdParam>, res: Response) => {
     const foundedPost = await postsQueryRepository.findPostById(new ObjectId(req.params.id))
@@ -56,7 +55,6 @@ postsRouters.post('/',
 
 postsRouters.put('/:id',
     authorizationValidation,
-    // postIdValidation,
     postTitleValidation,
     postShortDescription,
     postContentValidation,
@@ -73,7 +71,6 @@ postsRouters.put('/:id',
 
 postsRouters.delete('/:id',
     authorizationValidation,
-    // postIdValidation,
     async (req: RequestWithParams<GetByIdParam>, res: Response) => {
         const isDeleted = await postsService.deletePostById(req.params.id)
         if (isDeleted) {
